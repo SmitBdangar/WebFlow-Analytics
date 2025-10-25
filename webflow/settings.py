@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-g47^iqw@v1cq8u-(*0663je7skz=(cbzf-z)r)%0$rby-e#^y^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['webflow-analytics-production.up.railway.app', '127.0.0.1', 'localhost']
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://webflow-analytics-production.up.railway.app',
+]
+
 
 
 # Application definition
