@@ -1,0 +1,532 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM ACCESS INTERFACE</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background: #000000;
+            color: #FFFFFF;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .terminal-container {
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid #FFFFFF;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        .system-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid #FFFFFF;
+            padding-bottom: 1.5rem;
+        }
+        
+        .system-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        
+        .clearance-notice {
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            color: #FFFFFF;
+            margin-top: 0.5rem;
+        }
+        
+        .error-display {
+            background: transparent;
+            border: 1px solid #FF0000;
+            color: #FF0000;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .field-label {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.75rem;
+            display: block;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        
+        .terminal-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #FFFFFF;
+            color: #FFFFFF;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 1.1rem;
+            padding: 0.75rem 0.5rem;
+            outline: none;
+            letter-spacing: 1px;
+            caret-color: #FFFFFF;
+        }
+        
+        .terminal-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .terminal-input:focus {
+            border-bottom: 1px solid #FFFFFF;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+        }
+        
+        .terminal-input:-webkit-autofill,
+        .terminal-input:-webkit-autofill:hover,
+        .terminal-input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #FFFFFF;
+            -webkit-box-shadow: 0 0 0 1000px #000000 inset;
+            box-shadow: 0 0 0 1000px #000000 inset;
+            border-bottom: 1px solid #FFFFFF;
+        }
+        
+        .password-control {
+            position: relative;
+        }
+        
+        .toggle-visibility {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: 1px solid #FFFFFF;
+            color: #FFFFFF;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.75rem;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .toggle-visibility:hover {
+            background: #FFFFFF;
+            color: #000000;
+        }
+        
+        .password-control .terminal-input {
+            padding-right: 5rem;
+        }
+        
+        .checkbox-wrapper {
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .terminal-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #FFFFFF;
+            background: transparent;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            position: relative;
+        }
+        
+        .terminal-checkbox:checked::after {
+            content: 'X';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        .checkbox-label {
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .auth-button {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            padding: 1rem;
+            cursor: pointer;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            transition: all 0.2s;
+        }
+        
+        .auth-button:hover {
+            background: #FFFFFF;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        .security-footer {
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #FFFFFF;
+            text-align: center;
+        }
+        
+        .security-warning {
+            font-size: 0.7rem;
+            color: #666666;
+            letter-spacing: 1px;
+            line-height: 1.8;
+            text-transform: uppercase;
+        }
+        
+        .protocol-info {
+            font-size: 0.65rem;
+            color: #444444;
+            margin-top: 0.5rem;
+            letter-spacing: 1px;
+        }
+        
+        .cursor-blink {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .terminal-container {
+                padding: 2rem 1.5rem;
+                max-width: 100%;
+            }
+            
+            .system-title {
+                font-size: 1rem;
+                letter-spacing: 2px;
+                word-break: break-word;
+            }
+            
+            .clearance-notice {
+                font-size: 0.7rem;
+                letter-spacing: 0.5px;
+            }
+            
+            .field-label {
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+            }
+            
+            .terminal-input {
+                font-size: 0.95rem;
+                padding: 0.65rem 0.5rem;
+            }
+            
+            .toggle-visibility {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.5rem;
+                right: 0.25rem;
+            }
+            
+            .password-control .terminal-input {
+                padding-right: 4rem;
+            }
+            
+            .checkbox-label {
+                font-size: 0.7rem;
+            }
+            
+            .auth-button {
+                font-size: 0.8rem;
+                letter-spacing: 2px;
+                padding: 0.9rem;
+            }
+            
+            .security-warning {
+                font-size: 0.65rem;
+            }
+            
+            .protocol-info {
+                font-size: 0.6rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 0.75rem;
+            }
+            
+            .terminal-container {
+                padding: 1.5rem 1rem;
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            }
+            
+            .system-header {
+                margin-bottom: 2rem;
+                padding-bottom: 1rem;
+            }
+            
+            .system-title {
+                font-size: 0.9rem;
+                letter-spacing: 1.5px;
+            }
+            
+            .clearance-notice {
+                font-size: 0.65rem;
+                letter-spacing: 0.3px;
+                line-height: 1.4;
+            }
+            
+            .error-display {
+                font-size: 0.75rem;
+                padding: 0.75rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+            
+            .field-label {
+                font-size: 0.65rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .terminal-input {
+                font-size: 0.9rem;
+                padding: 0.6rem 0.25rem;
+            }
+            
+            .toggle-visibility {
+                font-size: 0.6rem;
+                padding: 0.2rem 0.4rem;
+                right: 0;
+            }
+            
+            .password-control .terminal-input {
+                padding-right: 3.5rem;
+            }
+            
+            .checkbox-wrapper {
+                margin: 1.5rem 0;
+                gap: 0.5rem;
+            }
+            
+            .terminal-checkbox {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .terminal-checkbox:checked::after {
+                font-size: 12px;
+            }
+            
+            .checkbox-label {
+                font-size: 0.65rem;
+                letter-spacing: 0.5px;
+            }
+            
+            .auth-button {
+                font-size: 0.75rem;
+                letter-spacing: 1.5px;
+                padding: 0.85rem;
+                margin-top: 1rem;
+            }
+            
+            .security-footer {
+                margin-top: 2rem;
+                padding-top: 1rem;
+            }
+            
+            .security-warning {
+                font-size: 0.6rem;
+                line-height: 1.6;
+            }
+            
+            .protocol-info {
+                font-size: 0.55rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .terminal-container {
+                padding: 1.25rem 0.75rem;
+            }
+            
+            .system-title {
+                font-size: 0.85rem;
+                letter-spacing: 1px;
+            }
+            
+            .clearance-notice {
+                font-size: 0.6rem;
+            }
+            
+            .field-label {
+                font-size: 0.6rem;
+            }
+            
+            .terminal-input {
+                font-size: 0.85rem;
+            }
+            
+            .auth-button {
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="system-header">
+            <div class="system-title">SYSTEM ACCESS INTERFACE</div>
+            <div class="clearance-notice">LEVEL 5 CLEARANCE REQUIRED. ALL SESSION DATA LOGGED.</div>
+        </div>
+
+        {% if error %}
+        <div class="error-display">
+            ACCESS DENIED: INVALID CREDENTIALS. SESSION TERMINATED. [ERROR CODE 403]
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username" class="field-label">OFFICER CREDENTIAL ID</label>
+                <input 
+                    type="text" 
+                    class="terminal-input" 
+                    id="id_username" 
+                    name="username" 
+                    autocomplete="username"
+                    placeholder="ENTER_AUTHORIZED_USER_ID"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="id_password" class="field-label">ENCRYPTED AUTH-CODE</label>
+                <div class="password-control">
+                    <input 
+                        type="password" 
+                        class="terminal-input" 
+                        id="id_password" 
+                        name="password" 
+                        autocomplete="current-password"
+                        placeholder="ENTER_SECURE_PASSKEY"
+                        required
+                    >
+                    <button 
+                        type="button" 
+                        class="toggle-visibility" 
+                        onclick="togglePassword()"
+                        aria-label="Toggle password visibility"
+                    >
+                        SHOW
+                    </button>
+                </div>
+            </div>
+
+            <div class="checkbox-wrapper">
+                <input 
+                    type="checkbox" 
+                    class="terminal-checkbox" 
+                    id="remember" 
+                    name="remember"
+                >
+                <label class="checkbox-label" for="remember">
+                    MAINTAIN SESSION PERSISTENCE
+                </label>
+            </div>
+
+            <button type="submit" class="auth-button">
+                AUTHENTICATE AND EXECUTE PROTOCOL
+            </button>
+        </form>
+
+        <div class="security-footer">
+            <p class="security-warning">
+                UNAUTHORIZED ACCESS IS A FEDERAL OFFENSE.<br>
+                ALL ACTIVITY IS MONITORED AND RECORDED.
+            </p>
+            <p class="protocol-info">
+                [PROTOCOL: END-TO-END ENCRYPTED V4.1]
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('id_password');
+            const toggleBtn = event.currentTarget;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = 'HIDE';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = 'SHOW';
+            }
+        }
+
+        // Submit form on Enter key in password field
+        document.getElementById('id_password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.querySelector('form').submit();
+            }
+        });
+
+        // Add cursor blink effect to focused inputs
+        const inputs = document.querySelectorAll('.terminal-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.classList.add('cursor-blink');
+            });
+            input.addEventListener('blur', function() {
+                this.classList.remove('cursor-blink');
+            });
+        });
+    </script>
+</body>
+</html>
