@@ -3,24 +3,448 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Link Tracker - Dashboard | SYSTEM MONITOR</title>
     
-    <link rel="stylesheet" href="{% static 'main-styles.css' %}">
+    <style>
+        /* --- Base Setup and Glassmorphism Background --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            /* --- BACKGROUND IMAGE CODE --- */
+            background-color: #2c3e50;
+            background-image: url('{% static "images/your_background_image.jpg" %}');
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            /* --- END BACKGROUND IMAGE CODE --- */
+
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- Mobile-First Header/Navbar --- */
+        .mobile-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .logout-btn {
+            padding: 10px 16px;
+            background: rgba(255, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            text-align: center;
+            transition: all 0.2s;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .logout-btn:active {
+            background: rgba(255, 0, 0, 0.4);
+            transform: scale(0.95);
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            padding: 80px 15px 20px 15px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #e0e0e0;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* --- Cards --- */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Form Elements --- */
+        .mb-4 {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        .terminal-input {
+            width: 100%;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 16px;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .terminal-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .terminal-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .terminal-input:read-only {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- Buttons --- */
+        .auth-button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: #ffffff;
+            border: none;
+            border-radius: 12px;
+            color: #007bff;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .auth-button:active {
+            background: #e0e0e0;
+            transform: scale(0.98);
+        }
+
+        .secondary-button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 15px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .secondary-button:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(0.98);
+        }
+
+        /* --- Success Alert --- */
+        .success-alert {
+            background: rgba(0, 255, 0, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 255, 0, 0.1);
+        }
+
+        .success-alert strong {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: #00FF00;
+            line-height: 1.4;
+        }
+
+        /* --- Mobile-Optimized Table --- */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .terminal-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 800px;
+        }
+
+        .terminal-table thead {
+            background: rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .terminal-table th {
+            padding: 14px 10px;
+            text-align: left;
+            font-weight: 700;
+            color: #ffffff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
+        }
+
+        .terminal-table td {
+            padding: 14px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .terminal-table tbody tr:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .badge-terminal {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.4);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00FF00;
+            white-space: nowrap;
+        }
+
+        /* --- Empty State --- */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #e0e0e0;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .empty-state p {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* --- Tablet and Desktop Optimization --- */
+        @media (min-width: 768px) {
+            .mobile-header {
+                padding: 20px 30px;
+            }
+
+            .logo-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .logout-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
+            .main-content {
+                padding: 100px 30px 30px 30px;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .header {
+                padding: 30px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .card {
+                padding: 30px;
+            }
+
+            .card-title {
+                font-size: 20px;
+            }
+
+            .terminal-table {
+                font-size: 14px;
+            }
+
+            .terminal-table th,
+            .terminal-table td {
+                padding: 15px 12px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                padding: 100px 40px 40px 40px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .card-title {
+                font-size: 22px;
+            }
+
+            .auth-button,
+            .secondary-button {
+                max-width: 300px;
+            }
+
+            .terminal-table th,
+            .terminal-table td {
+                padding: 15px;
+            }
+        }
+
+        /* --- Pull to Refresh Indicator (Optional) --- */
+        .refresh-indicator {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 255, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 0, 0.4);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #00FF00;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 999;
+        }
+
+        .refresh-indicator.show {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <div class="sidebar">
+    <!-- Mobile-First Header -->
+    <div class="mobile-header">
         <div class="logo">
             <div class="logo-icon">[WF]</div>
             <div class="logo-text">System Monitor</div>
         </div>
-        
-        <nav class="nav-links">
-            <a href="#" class="nav-link active">Dashboard</a>
-        </nav>
-        
-        <a href="{% url 'logout' %}" class="logout-btn">ACCESS LOGOUT PROTOCOL</a>
+        <a href="{% url 'logout' %}" class="logout-btn">LOGOUT</a>
     </div>
 
     <div class="main-content">
@@ -35,7 +459,7 @@
                 {% csrf_token %}
                 <div class="mb-4">
                     <label for="case_name" class="form-label">CASE IDENTIFIER</label>
-                    <input type="text" class="terminal-input" id="case_name" name="case_name" placeholder="INPUT_UNIQUE_CASE_ID" required>
+                    <input type="text" class="terminal-input" id="case_name" name="case_name" placeholder="INPUT_UNIQUE_CASE_ID" required autocomplete="off">
                 </div>
                 <button type="submit" class="auth-button">INITIATE GENERATION</button>
             </form>
@@ -46,9 +470,7 @@
             <strong>[STATUS: OK] LINK GENERATED. AWAITING TRANSMISSION.</strong>
             <label for="generatedLink" class="form-label" style="color: #00FF00; margin-top: 1rem;">GENERATED PROTOCOL PATH</label>
             <input type="text" id="generatedLink" class="terminal-input" value="{{ generated_link }}" readonly>
-            <div class="d-flex">
-                <button type="button" class="secondary-button" onclick="copyLink()">COPY TO BUFFER</button>
-            </div>
+            <button type="button" class="secondary-button" onclick="copyLink()">COPY TO BUFFER</button>
         </div>
         {% endif %}
 
@@ -86,7 +508,7 @@
                                     [DATA CORRUPT]
                                 {% endif %}
                             </td>
-                            <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 {{ click.user_agent }}
                             </td>
                         </tr>
@@ -103,6 +525,76 @@
         </div>
     </div>
     
-    <script src="{% static 'main-scripts.js' %}"></script>
+    <script>
+        function copyLink() {
+            const linkInput = document.getElementById('generatedLink');
+            
+            // Use modern clipboard API for better mobile support
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(linkInput.value).then(() => {
+                    showCopyFeedback();
+                }).catch(err => {
+                    // Fallback to old method
+                    fallbackCopy();
+                });
+            } else {
+                fallbackCopy();
+            }
+            
+            function fallbackCopy() {
+                linkInput.select();
+                linkInput.setSelectionRange(0, 99999);
+                try {
+                    document.execCommand('copy');
+                    showCopyFeedback();
+                } catch (err) {
+                    console.error('Copy failed:', err);
+                }
+            }
+            
+            function showCopyFeedback() {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✓ COPIED!';
+                button.style.background = 'rgba(0, 255, 0, 0.3)';
+                button.style.borderColor = 'rgba(0, 255, 0, 0.5)';
+                button.style.color = '#00FF00';
+                
+                // Haptic feedback on supported devices
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                    button.style.borderColor = '';
+                    button.style.color = '';
+                }, 2000);
+            }
+        }
+
+        // Prevent zoom on double-tap for better mobile UX
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Auto-scroll table hint for mobile users
+        const tableContainer = document.querySelector('.table-container');
+        if (tableContainer && window.innerWidth < 768) {
+            let scrollHintShown = false;
+            tableContainer.addEventListener('touchstart', function() {
+                if (!scrollHintShown && tableContainer.scrollWidth > tableContainer.clientWidth) {
+                    scrollHintShown = true;
+                    // You could add a visual hint here if needed
+                }
+            }, { once: true });
+        }
+    </script>
 </body>
 </html>
