@@ -23,14 +23,6 @@ A Django-based link tracking system with real-time geolocation monitoring and a 
 - **Analytics Research** - Gather geographic and device data from visitors
 - **Educational Projects** - Learn Django, geolocation APIs, and web tracking
 
-## 📸 Screenshots
-
-### Login Page
-Modern glassmorphism login interface with password visibility toggle.
-
-### Dashboard
-Real-time monitoring dashboard with link generation and click analytics.
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -38,55 +30,6 @@ Real-time monitoring dashboard with link generation and click analytics.
 - Python 3.8 or higher
 - pip (Python package manager)
 - Git
-
-### Installation
-
-1. **Clone the repository**
-```bash
-git clone https://github.com/yourusername/webflow-analytics.git
-cd webflow-analytics
-```
-
-2. **Create virtual environment**
-```bash
-python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-
-# macOS/Linux:
-source venv/bin/activate
-```
-
-3. **Install dependencies**
-```bash
-pip install Django gunicorn whitenoise requests
-```
-
-4. **Configure settings**
-
-Edit `webflow/settings.py`:
-```python
-DEBUG = True  # Set to True for local development
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-```
-
-5. **Setup database**
-```bash
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py collectstatic --noinput
-```
-
-6. **Run development server**
-```bash
-python manage.py runserver
-```
-
-7. **Access the application**
-- Open browser to: `http://127.0.0.1:8000/`
-- Login with your superuser credentials
 
 ## 📖 Usage Guide
 
@@ -144,61 +87,6 @@ The system uses [ipapi.co](https://ipapi.co/) free API for IP geolocation:
 - Latitude and Longitude coordinates
 - Automatic handling of private IP addresses
 
-## 🎨 Customization
-
-### Background Image
-Replace the background image in both login and main pages:
-
-1. Add your image to `static/images/your_background_image.jpg`
-2. Update the path in templates:
-```html
-background-image: url('{% static "images/your_background_image.jpg" %}');
-```
-
-### Color Scheme
-The glassmorphism design uses:
-- Semi-transparent white glass panels
-- Backdrop blur effects
-- Dynamic hover states
-- Mobile-optimized touch feedback
-
-## 🚢 Deployment (Railway)
-
-### Prerequisites
-- Railway account
-- GitHub repository
-
-### Steps
-
-1. **Prepare for deployment**
-```bash
-# Ensure these files exist:
-# - Procfile
-# - requirements.txt (or install via Railway)
-```
-
-2. **Update settings**
-```python
-# webflow/settings.py
-DEBUG = False
-ALLOWED_HOSTS = ['your-app.railway.app', '127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://your-app.railway.app']
-```
-
-3. **Deploy to Railway**
-- Connect your GitHub repository
-- Railway will auto-detect Django
-- Add environment variables if needed
-- Deploy!
-
-4. **Post-deployment**
-```bash
-# Run migrations via Railway CLI
-railway run python manage.py migrate
-railway run python manage.py createsuperuser
-railway run python manage.py collectstatic --noinput
-```
-
 ## 📁 Project Structure
 
 ```
@@ -227,17 +115,6 @@ webflow-analytics/
 └── README.md                # This file
 ```
 
-## 🔒 Security Notes
-
-### Important Considerations
-
-1. **SECRET_KEY**: Change the default secret key in `settings.py`
-2. **DEBUG Mode**: Always set `DEBUG = False` in production
-3. **ALLOWED_HOSTS**: Configure properly for your domain
-4. **HTTPS**: Use HTTPS in production (Railway provides this automatically)
-5. **Rate Limiting**: Consider adding rate limiting for API calls
-6. **Database**: Use PostgreSQL for production instead of SQLite
-
 ### Privacy & Legal
 
 ⚠️ **IMPORTANT**: This tool tracks user IP addresses and location data. Ensure you:
@@ -260,12 +137,6 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-### Admin Panel
-Access the Django admin at `/admin/` to:
-- Manage users
-- View all links and clicks
-- Perform bulk operations
-
 ## 🐛 Troubleshooting
 
 ### Common Issues
@@ -284,11 +155,6 @@ python manage.py migrate
 - Check internet connection
 - Verify IP is not private/local
 - Check ipapi.co rate limits (1000/day free)
-
-**Railway deployment fails:**
-- Verify `Procfile` exists
-- Check `settings.py` configuration
-- Review Railway logs
 
 ## 📝 Requirements
 
@@ -317,20 +183,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **This project is created for educational purposes only.** It demonstrates Django web development, tracking systems, and geolocation integration. Not intended for production use without proper security audits and legal compliance reviews.
 
-## 🙏 Acknowledgments
-
-- Built with Django and Python
-- Geolocation by [ipapi.co](https://ipapi.co/)
-- UI inspired by modern glassmorphism design trends
-- Mobile-first approach for optimal user experience
-
-## 📞 Support
-
-For issues and questions:
-- Open an issue on GitHub
-- Check existing documentation
-- Review Django documentation at [docs.djangoproject.com](https://docs.djangoproject.com/)
-
 ---
 
-**Made with ❤️ for educational purposes**
+**Made for educational purposes**
